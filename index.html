@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security Practices Evaluation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      background-image: url("bg.jpg");
+      background-repeat:no-repeat;
+      background-size: cover;
+    }
+    .container {
+      margin-top: 30px;
+      padding: 20px;
+    }
+    h1 {
+      color: white;
+    }
+    p{
+        color: white;
+    }
+    .image-display img {
+      max-width: 100%;
+      height: auto;
+      max-height: 300px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    button {
+        margin-left: 10px;
+    }
+    .buttons {
+      display: flex;
+      justify-content: space-evenly;
+      margin: 20px 0;
+    }
+    .buttons button {
+      padding: 15px 25px;
+      font-size: 18px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .good-btn {
+      background-color: #4caf50;
+      color: white;
+    }
+    .good-btn:hover {
+      background-color: #45a049;
+    }
+    .bad-btn {
+      background-color: #f44336;
+      color: white;
+    }
+    .bad-btn:hover {
+      background-color: #e53935;
+    }
+    .restart-btn {
+      background-color: #0094f7;
+      color: white;
+      padding: 15px 25px;
+      border: none;
+      border-radius: 5px;
+      font-size: 18px;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background-color 0.3s ease;
+    }
+    .restart-btn:hover {
+      background-color: #0056b3;
+    }
+    .results {
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    /* Timer styles */
+    .timer {
+      font-size: 30px;
+      color: white;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+    .warning {
+      color: red; /* Change color when time is low */
+    }
+
+    /* Styles for card layout */
+    .card {
+      background-color: #ffffff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      max-width: 200px;
+    }
+    .card-container {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      margin-top: 0;
+      margin-bottom: 0;
+      padding: 0 10px;
+    }
+    .center-card {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 100%;
+    }
+    .card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    }
+    .card-image {
+      width: 100%;
+      height: 150px; 
+      object-fit: cover;
+    }
+    .card-details {
+      padding: 10px;
+    }
+    .card-details p {
+      margin: 0;
+      font-size: 14px;
+      color: #555;
+    }
+    .center-button {
+        max-width: 100%;
+        justify-items: center;
+    }
+    @media (max-width: 768px) {
+      .image-display img {
+        max-height: 200px;
+      }
+      .buttons button {
+        font-size: 16px;
+        padding: 10px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Evaluate Security Practices</h1>
+    <div class="timer" id="timer">Time Left: 20s</div> <!-- Timer display -->
+    <div class="image-display">
+      <img id="practice-image" src="" alt="Security Practice">
+    </div>
+    <div class="center-button">
+      <div class="buttons">
+        <button class="good-btn" onclick="recordChoice('good')">Good</button>
+        <button class="bad-btn" onclick="recordChoice('bad')">Bad</button>
+      </div>
+    </div>
+    <div id="results" class="results"></div>
+  </div>
+
+  <script>
+      const allImages = [
+      // Good Images
+      { src: "good1.jpg", tag: "good" },
+      { src: "good2.jpg", tag: "good" },
+      { src: "good3.jpg", tag: "good" },
+      { src: "good4.jpg", tag: "good" },
+      { src: "good5.jpg", tag: "good" },
+      { src: "good6.jpg", tag: "good" },
+      { src: "good7.jpg", tag: "good" },
+      { src: "good8.jpg", tag: "good" },
+      { src: "good9.jpg", tag: "good" },
+      { src: "good10.jpg", tag: "good" },
+      { src: "good11.jpg", tag: "good" },
+      { src: "good12.jpg", tag: "good" },
+      { src: "good13.jpg", tag: "good" },
+      { src: "good14.jpg", tag: "good" },
+      { src: "good15.jpg", tag: "good" },
+      { src: "good16.jpg", tag: "good" },
+      { src: "good17.jpg", tag: "good" },
+      { src: "good18.jpg", tag: "good" },
+      
+      // Bad Images
+      { src: "bad1.jpg", tag: "bad" },
+      { src: "bad2.jpg", tag: "bad" },
+      { src: "bad3.jpg", tag: "bad" },
+      { src: "bad4.jpg", tag: "bad" },
+      { src: "bad5.jpg", tag: "bad" },
+      { src: "bad6.jpg", tag: "bad" },
+      { src: "bad7.jpg", tag: "bad" },
+      { src: "bad8.jpg", tag: "bad" },
+      { src: "bad9.jpg", tag: "bad" },
+      { src: "bad10.jpg", tag: "bad" },
+      { src: "bad11.jpg", tag: "bad" },
+      { src: "bad12.jpg", tag: "bad" },
+      { src: "bad13.jpg", tag: "bad" },
+      { src: "bad14.jpg", tag: "bad" },
+      { src: "bad15.jpg", tag: "bad" },
+      { src: "bad16.jpg", tag: "bad" },
+      { src: "bad17.jpg", tag: "bad" },
+      { src: "bad18.jpg", tag: "bad" },
+      { src: "bad19.jpg", tag: "bad" },
+      { src: "bad20.jpg", tag: "bad" },
+      { src: "bad21.jpg", tag: "bad" },
+      { src: "bad22.jpg", tag: "bad" },
+      { src: "bad23.jpg", tag: "bad" }
+    ];
+ 
+  let images = [];
+  let currentIndex = 0;
+  let correctCount = 0;
+  let incorrectCount = 0;
+  const wrongChoices = [];
+  let timer;
+  let timeLeft = 20;
+
+  function initializeGame() {
+    // Reset all the necessary variables and UI
+    images = allImages.sort(() => Math.random() - 0.5).slice(0, 20);
+    currentIndex = 0;
+    correctCount = 0;
+    incorrectCount = 0;
+    wrongChoices.length = 0;
+    document.getElementById("results").innerHTML = "";
+    document.querySelector(".image-display").style.display = "block";
+    document.querySelector(".buttons").style.display = "flex";
+    updateImage();
+    resetTimer();  // Reset and start the timer
+  }
+
+  function resetTimer() {
+    // Reset the timeLeft to 20 seconds
+    timeLeft = 20;
+    // Clear the existing interval (if any)
+    clearInterval(timer);
+    document.getElementById("timer").classList.remove("warning");
+    // Start the timer again
+    startTimer();
+  }
+
+  function startTimer() {
+    // Update the timer every second
+    timer = setInterval(function() {
+      if (timeLeft > 5) {
+        document.getElementById("timer").textContent = `Time Left: ${timeLeft}s`;
+      } else {
+        document.getElementById("timer").textContent = `Hurry! ${timeLeft}s left`;
+        document.getElementById("timer").classList.add("warning"); // Add warning style for last 5 seconds
+      }
+
+      if (timeLeft <= 0) {
+        clearInterval(timer); // Stop the timer when it reaches 0
+        showResults();
+      } else {
+        timeLeft--;
+      }
+    }, 1000);
+  }
+
+  function updateImage() {
+    if (currentIndex < images.length) {
+      const currentImage = images[currentIndex];
+      document.getElementById("practice-image").src = currentImage.src;
+    } else {
+      showResults();
+    }
+  }
+
+  function recordChoice(choice) {
+    const currentImage = images[currentIndex];
+
+    if (choice === currentImage.tag) {
+      correctCount++;
+    } else {
+      incorrectCount++;
+      wrongChoices.push({ src: currentImage.src, correctTag: currentImage.tag });
+    }
+
+    currentIndex++;
+    updateImage();
+  }
+
+  function showResults() {
+    document.querySelector(".image-display").style.display = "none";
+    document.querySelector(".buttons").style.display = "none";
+
+    let wrongChoicesHtml = "";
+    if (wrongChoices.length > 0) {
+      wrongChoicesHtml = `
+        <p>Incorrect Choices:</p>
+        <div class="center-card">
+        <div class="card-container">
+          ${wrongChoices.map(
+            (img) => `
+            <div class="card">
+              <img class="card-image" src="${img.src}" alt="Incorrect Choice">
+              <div class="card-details">
+                <p>Correct Choice: <strong>${img.correctTag}</strong></p>
+              </div>
+            </div>
+          `
+          ).join("")}
+        </div>
+        </div>
+      `;
+    }
+
+    document.getElementById("results").innerHTML = `
+      <p>Evaluation Complete!</p>
+      <p>Correct Choices: ${correctCount}</p>
+      <p>Incorrect Choices: ${incorrectCount}</p>
+      ${wrongChoicesHtml}
+      <button class="restart-btn" onclick="initializeGame()">Restart Game</button>
+    `;
+  }
+
+  window.onload = initializeGame;
+</script>
+</body>
+</html>
